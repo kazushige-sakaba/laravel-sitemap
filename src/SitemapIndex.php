@@ -10,6 +10,9 @@ class SitemapIndex
     /** @var array */
     protected $tags = [];
 
+    /** @var bool|int */
+    protected $setDisplayToLastmod = true;
+
     /**
      * @return static
      */
@@ -68,9 +71,10 @@ class SitemapIndex
     public function render(): string
     {
         $tags = $this->tags;
+        $setDisplayToLastmod = $this->setDisplayToLastmod;
 
         return view('laravel-sitemap::sitemapIndex/index')
-            ->with(compact('tags'))
+            ->with(compact('tags', 'setDisplayToLastmod'))
             ->render();
     }
 
@@ -82,6 +86,20 @@ class SitemapIndex
     public function writeToFile(string $path)
     {
         file_put_contents($path, $this->render());
+
+        return $this;
+    }
+
+    /**
+     * Set display/non-display of Lastmod of view file.
+     *
+     * @param bool $setDisplayToLastmod
+     *
+     * @return $this
+     */
+    public function setDisplayToLastmod(bool $setDisplayToLastmod)
+    {
+        $this->setDisplayToLastmod = $setDisplayToLastmod;
 
         return $this;
     }
